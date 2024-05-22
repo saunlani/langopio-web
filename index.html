@@ -123,7 +123,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>das Adjektivdeklinationsspiel von <b>Langopio</b></h1>
+    <h1>das Adjektivdeklinationsspiel von Langopio</h1>
     <div class="instructions">
       <p>Fülle die Deklinationstabellen für das gegebene Adjektiv und Substantiv aus.</p>
       <div class="examples">
@@ -140,7 +140,7 @@
         </ul>
       </div>
     </div>
-    <p>Zeit: <span id="timer">0:00</span></p>
+    <p id="timer-container" style="display:none;">Zeit: <span id="timer">0:00</span></p>
     <div id="results"></div>
 
     <div style="display: flex;">
@@ -301,6 +301,7 @@
       document.getElementById('start-btn').style.display = 'none';
       document.getElementById('submit-btn').style.display = 'block';
       document.getElementById('reset-btn').style.display = 'none';
+      document.getElementById('timer-container').style.display = 'block'; // Show timer
       startTimer();
     });
 
@@ -362,6 +363,8 @@
 
       document.getElementById('submit-btn').style.display = 'none';
       document.getElementById('reset-btn').style.display = 'block';
+      document.getElementById('timer-container').style.display = 'none';
+      document.getElementById('timer').textContent = '0:00';
     });
 
     document.getElementById('reset-btn').addEventListener('click', function () {
