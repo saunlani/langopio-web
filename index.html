@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Langopio</title>
-      <style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Langopio</title>
+  <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #f0f0f0;
@@ -26,6 +27,13 @@
     h2 {
       text-align: center;
       color: #007BFF;
+    }
+      
+    h1 {
+      padding: 10px;
+      max-width: 100%;
+      word-wrap: break-word;
+      box-sizing: border-box;
     }
 
     .instructions {
@@ -63,10 +71,12 @@
 
     .table-container {
       margin-bottom: 20px;
+      overflow-x: auto;
     }
 
     table {
       width: 100%;
+      min-width: 600px;
       border-collapse: collapse;
     }
 
@@ -117,15 +127,52 @@
       color: #721c24;
       margin-top: 5px;
     }
+      
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px;
+      }
+
+      .examples li {
+        font-size: 1em;
+      }
+
+      th,
+      td {
+        padding: 5px;
+      }
+
+      button {
+        padding: 8px 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .examples li {
+        font-size: 0.9em;
+      }
+
+      th,
+      td {
+        padding: 3px;
+      }
+
+      button {
+        padding: 6px 12px;
+        font-size: 0.9em;
+      }
+    }
   </style>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2107084410392210"
-     crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2107084410392210"
+    crossorigin="anonymous"></script>
 </head>
+
 <body>
   <div class="container">
-    <h1>das Adjektivdeklinationsspiel von Langopio</h1>
+    <h1>Adjektivdeklination von Langopio</h1>
     <div class="instructions">
       <p>Fülle die Deklinationstabellen für das gegebene Adjektiv und Substantiv aus.</p>
+      <p>Dieses Spiel ist am besten auf einem Desktop-Computer spielbar, obwohl es auch auf mobilen Geräten funktioniert.</p>
       <div class="examples">
         <p><strong>Beispiel Adjektive und Substantive:</strong></p>
         <ul>
@@ -143,7 +190,7 @@
     <p id="timer-container" style="display:none;">Zeit: <span id="timer">0:00</span></p>
     <div id="results"></div>
 
-    <div style="display: flex;">
+    <div style="display: flex; justify-content: center; flex-wrap: wrap;">
       <button type="button" id="start-btn">Start</button>
       <button type="button" id="submit-btn" style="display:none;">Submit</button>
       <button type="button" id="reset-btn" style="display:none;">Reset</button>
@@ -290,7 +337,6 @@
         </table>
       </div>
     </form>
-
   </div>
   <script>
     let timerInterval;
@@ -395,4 +441,5 @@
     }
   </script>
 </body>
+
 </html>
