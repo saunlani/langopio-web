@@ -4,48 +4,392 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Langopio</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f4f4f4;
-        }
+      <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
 
-        .container {
-            text-align: center;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
 
-        h1 {
-            color: #333;
-        }
+    h1,
+    h2 {
+      text-align: center;
+      color: #007BFF;
+    }
 
-        p {
-            color: #555;
-            font-size: 18px;
-        }
+    .instructions {
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 10px;
+      background-color: #e9ecef;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
-        .coming-soon {
-            color: #888;
-            font-size: 14px;
-            margin-top: 20px;
-        }
-    </style>
+    .examples {
+      margin-top: 10px;
+      text-align: left;
+    }
+
+    .examples ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .examples li {
+      margin: 5px 0;
+      font-size: 1.1em;
+    }
+
+    .examples li strong {
+      color: #007BFF;
+    }
+
+    .examples span {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .table-container {
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table,
+    th,
+    td {
+      border: 1px solid #ccc;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      text-align: center;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 5px;
+      box-sizing: border-box;
+    }
+
+    button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .correct {
+      background-color: #d4edda;
+    }
+
+    .incorrect {
+      background-color: #f8d7da;
+    }
+
+    .old-answer {
+      display: block;
+      font-size: 0.9em;
+      color: #721c24;
+      margin-top: 5px;
+    }
+  </style>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2107084410392210"
      crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to Langopio!</h1>
-        <p>This website is currently under construction.</p>
+  <div class="container">
+    <h1>das Adjektivdeklinationsspiel von <b>Langopio</b></h1>
+    <div class="instructions">
+      <p>Fülle die Deklinationstabellen für das gegebene Adjektiv und Substantiv aus.</p>
+      <div class="examples">
+        <p><strong>Beispiel Adjektive und Substantive:</strong></p>
+        <ul>
+          <li><strong>Maskulin:</strong> Adjektiv: <span id="adjective-maskulin">groß</span>, Substantiv: <span
+              id="noun-maskulin">Mann</span></li>
+          <li><strong>Feminin:</strong> Adjektiv: <span id="adjective-feminin">nett</span>, Substantiv: <span
+              id="noun-feminin">Frau</span></li>
+          <li><strong>Neutrum:</strong> Adjektiv: <span id="adjective-neutrum">rot</span>, Substantiv: <span
+              id="noun-neutrum">Auto</span></li>
+          <li><strong>Plural:</strong> Adjektiv: <span id="adjective-plural">hilfreich</span>, Substantiv: <span
+              id="noun-plural">Leute</span></li>
+        </ul>
+      </div>
     </div>
+    <p>Zeit: <span id="timer">0:00</span></p>
+    <div id="results"></div>
+
+    <div style="display: flex;">
+      <button type="button" id="start-btn">Start</button>
+      <button type="button" id="submit-btn" style="display:none;">Submit</button>
+      <button type="button" id="reset-btn" style="display:none;">Reset</button>
+    </div>
+    <form id="declension-form" style="display:none;">
+      <div class="table-container">
+        <h2>Nominativ</h2>
+        <table>
+          <tr>
+            <th></th>
+            <th>Bestimmter Artikel</th>
+            <th>Unbestimmter Artikel</th>
+            <th>Ohne Artikel</th>
+          </tr>
+          <tr>
+            <td>Maskulin</td>
+            <td><input type="text" data-case="nominative" data-type="bestimmter" data-gender="m"></td>
+            <td><input type="text" data-case="nominative" data-type="unbestimmter" data-gender="m"></td>
+            <td><input type="text" data-case="nominative" data-type="ohne" data-gender="m"></td>
+          </tr>
+          <tr>
+            <td>Feminin</td>
+            <td><input type="text" data-case="nominative" data-type="bestimmter" data-gender="f"></td>
+            <td><input type="text" data-case="nominative" data-type="unbestimmter" data-gender="f"></td>
+            <td><input type="text" data-case="nominative" data-type="ohne" data-gender="f"></td>
+          </tr>
+          <tr>
+            <td>Neutrum</td>
+            <td><input type="text" data-case="nominative" data-type="bestimmter" data-gender="n"></td>
+            <td><input type="text" data-case="nominative" data-type="unbestimmter" data-gender="n"></td>
+            <td><input type="text" data-case="nominative" data-type="ohne" data-gender="n"></td>
+          </tr>
+          <tr>
+            <td>Plural</td>
+            <td><input type="text" data-case="nominative" data-type="bestimmter" data-gender="pl"></td>
+            <td><input type="text" data-case="nominative" data-type="unbestimmter" data-gender="pl"></td>
+            <td><input type="text" data-case="nominative" data-type="ohne" data-gender="pl"></td>
+          </tr>
+        </table>
+      </div>
+      <div class="table-container">
+        <h2>Akkusativ</h2>
+        <table>
+          <tr>
+            <th></th>
+            <th>Bestimmter Artikel</th>
+            <th>Unbestimmter Artikel</th>
+            <th>Ohne Artikel</th>
+          </tr>
+          <tr>
+            <td>Maskulin</td>
+            <td><input type="text" data-case="accusative" data-type="bestimmter" data-gender="m"></td>
+            <td><input type="text" data-case="accusative" data-type="unbestimmter" data-gender="m"></td>
+            <td><input type="text" data-case="accusative" data-type="ohne" data-gender="m"></td>
+          </tr>
+          <tr>
+            <td>Feminin</td>
+            <td><input type="text" data-case="accusative" data-type="bestimmter" data-gender="f"></td>
+            <td><input type="text" data-case="accusative" data-type="unbestimmter" data-gender="f"></td>
+            <td><input type="text" data-case="accusative" data-type="ohne" data-gender="f"></td>
+          </tr>
+          <tr>
+            <td>Neutrum</td>
+            <td><input type="text" data-case="accusative" data-type="bestimmter" data-gender="n"></td>
+            <td><input type="text" data-case="accusative" data-type="unbestimmter" data-gender="n"></td>
+            <td><input type="text" data-case="accusative" data-type="ohne" data-gender="n"></td>
+          </tr>
+          <tr>
+            <td>Plural</td>
+            <td><input type="text" data-case="accusative" data-type="bestimmter" data-gender="pl"></td>
+            <td><input type="text" data-case="accusative" data-type="unbestimmter" data-gender="pl"></td>
+            <td><input type="text" data-case="accusative" data-type="ohne" data-gender="pl"></td>
+          </tr>
+        </table>
+      </div>
+      <div class="table-container">
+        <h2>Dativ</h2>
+        <table>
+          <tr>
+            <th></th>
+            <th>Bestimmter Artikel</th>
+            <th>Unbestimmter Artikel</th>
+            <th>Ohne Artikel</th>
+          </tr>
+          <tr>
+            <td>Maskulin</td>
+            <td><input type="text" data-case="dative" data-type="bestimmter" data-gender="m"></td>
+            <td><input type="text" data-case="dative" data-type="unbestimmter" data-gender="m"></td>
+            <td><input type="text" data-case="dative" data-type="ohne" data-gender="m"></td>
+          </tr>
+          <tr>
+            <td>Feminin</td>
+            <td><input type="text" data-case="dative" data-type="bestimmter" data-gender="f"></td>
+            <td><input type="text" data-case="dative" data-type="unbestimmter" data-gender="f"></td>
+            <td><input type="text" data-case="dative" data-type="ohne" data-gender="f"></td>
+          </tr>
+          <tr>
+            <td>Neutrum</td>
+            <td><input type="text" data-case="dative" data-type="bestimmter" data-gender="n"></td>
+            <td><input type="text" data-case="dative" data-type="unbestimmter" data-gender="n"></td>
+            <td><input type="text" data-case="dative" data-type="ohne" data-gender="n"></td>
+          </tr>
+          <tr>
+            <td>Plural</td>
+            <td><input type="text" data-case="dative" data-type="bestimmter" data-gender="pl"></td>
+            <td><input type="text" data-case="dative" data-type="unbestimmter" data-gender="pl"></td>
+            <td><input type="text" data-case="dative" data-type="ohne" data-gender="pl"></td>
+          </tr>
+        </table>
+      </div>
+      <div class="table-container">
+        <h2>Genitiv</h2>
+        <table>
+          <tr>
+            <th></th>
+            <th>Bestimmter Artikel</th>
+            <th>Unbestimmter Artikel</th>
+            <th>Ohne Artikel</th>
+          </tr>
+          <tr>
+            <td>Maskulin</td>
+            <td><input type="text" data-case="genitive" data-type="bestimmter" data-gender="m"></td>
+            <td><input type="text" data-case="genitive" data-type="unbestimmter" data-gender="m"></td>
+            <td><input type="text" data-case="genitive" data-type="ohne" data-gender="m"></td>
+          </tr>
+          <tr>
+            <td>Feminin</td>
+            <td><input type="text" data-case="genitive" data-type="bestimmter" data-gender="f"></td>
+            <td><input type="text" data-case="genitive" data-type="unbestimmter" data-gender="f"></td>
+            <td><input type="text" data-case="genitive" data-type="ohne" data-gender="f"></td>
+          </tr>
+          <tr>
+            <td>Neutrum</td>
+            <td><input type="text" data-case="genitive" data-type="bestimmter" data-gender="n"></td>
+            <td><input type="text" data-case="genitive" data-type="unbestimmter" data-gender="n"></td>
+            <td><input type="text" data-case="genitive" data-type="ohne" data-gender="n"></td>
+          </tr>
+          <tr>
+            <td>Plural</td>
+            <td><input type="text" data-case="genitive" data-type="bestimmter" data-gender="pl"></td>
+            <td><input type="text" data-case="genitive" data-type="unbestimmter" data-gender="pl"></td>
+            <td><input type="text" data-case="genitive" data-type="ohne" data-gender="pl"></td>
+          </tr>
+        </table>
+      </div>
+    </form>
+
+  </div>
+  <script>
+    let timerInterval;
+    let startTime;
+
+    document.getElementById('start-btn').addEventListener('click', function () {
+      document.getElementById('declension-form').style.display = 'block';
+      document.getElementById('start-btn').style.display = 'none';
+      document.getElementById('submit-btn').style.display = 'block';
+      document.getElementById('reset-btn').style.display = 'none';
+      startTimer();
+    });
+
+    document.getElementById('submit-btn').addEventListener('click', function () {
+      clearInterval(timerInterval);
+      const correctAnswers = {
+        nominative: {
+          m: { bestimmter: 'der große Mann', unbestimmter: 'ein großer Mann', ohne: 'großer Mann' },
+          f: { bestimmter: 'die nette Frau', unbestimmter: 'eine nette Frau', ohne: 'nette Frau' },
+          n: { bestimmter: 'das rote Auto', unbestimmter: 'ein rotes Auto', ohne: 'rotes Auto' },
+          pl: { bestimmter: 'die hilfreichen Leute', unbestimmter: 'hilfreiche Leute', ohne: 'hilfreiche Leute' }
+        },
+        accusative: {
+          m: { bestimmter: 'den großen Mann', unbestimmter: 'einen großen Mann', ohne: 'großen Mann' },
+          f: { bestimmter: 'die nette Frau', unbestimmter: 'eine nette Frau', ohne: 'nette Frau' },
+          n: { bestimmter: 'das rote Auto', unbestimmter: 'ein rotes Auto', ohne: 'rotes Auto' },
+          pl: { bestimmter: 'die hilfreichen Leute', unbestimmter: 'hilfreiche Leute', ohne: 'hilfreiche Leute' }
+        },
+        dative: {
+          m: { bestimmter: 'dem großen Mann', unbestimmter: 'einem großen Mann', ohne: 'großem Mann' },
+          f: { bestimmter: 'der netten Frau', unbestimmter: 'einer netten Frau', ohne: 'netter Frau' },
+          n: { bestimmter: 'dem roten Auto', unbestimmter: 'einem roten Auto', ohne: 'rotem Auto' },
+          pl: { bestimmter: 'den hilfreichen Leuten', unbestimmter: 'hilfreichen Leuten', ohne: 'hilfreichen Leuten' }
+        },
+        genitive: {
+          m: { bestimmter: 'des großen Manns', unbestimmter: 'eines großen Manns', ohne: 'großen Manns' },
+          f: { bestimmter: 'der netten Frau', unbestimmter: 'einer netten Frau', ohne: 'netter Frau' },
+          n: { bestimmter: 'des roten Autos', unbestimmter: 'eines roten Autos', ohne: 'roten Autos' },
+          pl: { bestimmter: 'der hilfreichen Leute', unbestimmter: 'hilfreicher Leute', ohne: 'hilfreicher Leute' }
+        }
+      };
+
+      const inputs = document.querySelectorAll('input[type="text"]');
+      let score = 0;
+      const total = inputs.length;
+
+      inputs.forEach(input => {
+        const userAnswer = input.value.trim();
+        const inputCase = input.getAttribute('data-case');
+        const inputType = input.getAttribute('data-type');
+        const inputGender = input.getAttribute('data-gender');
+        const correctAnswer = correctAnswers[inputCase][inputGender][inputType];
+
+        if (userAnswer === correctAnswer) {
+          input.classList.add('correct');
+          score++;
+        } else {
+          input.classList.add('incorrect');
+          const oldAnswer = document.createElement('span');
+          oldAnswer.textContent = userAnswer;
+          oldAnswer.classList.add('old-answer');
+          input.parentNode.appendChild(oldAnswer);
+          input.value = correctAnswer;
+        }
+      });
+
+      const results = document.getElementById('results');
+      results.textContent = `Du hast ${score} von ${total} richtig! Zeit: ${document.getElementById('timer').textContent}`;
+
+      document.getElementById('submit-btn').style.display = 'none';
+      document.getElementById('reset-btn').style.display = 'block';
+    });
+
+    document.getElementById('reset-btn').addEventListener('click', function () {
+      const inputs = document.querySelectorAll('input[type="text"]');
+      inputs.forEach(input => {
+        input.value = '';
+        input.classList.remove('correct', 'incorrect');
+        const oldAnswer = input.parentNode.querySelector('.old-answer');
+        if (oldAnswer) {
+          oldAnswer.remove();
+        }
+      });
+      document.getElementById('results').textContent = '';
+      document.getElementById('reset-btn').style.display = 'none';
+      document.getElementById('declension-form').style.display = 'none';
+      document.getElementById('start-btn').style.display = 'block';
+      document.getElementById('timer').textContent = '0:00';
+    });
+
+    function startTimer() {
+      startTime = Date.now();
+      timerInterval = setInterval(() => {
+        const elapsedTime = Date.now() - startTime;
+        const seconds = Math.floor((elapsedTime / 1000) % 60);
+        const minutes = Math.floor((elapsedTime / (1000 * 60)) % 60);
+        document.getElementById('timer').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+      }, 1000);
+    }
+  </script>
 </body>
 </html>
