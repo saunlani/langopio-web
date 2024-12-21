@@ -28,7 +28,7 @@
       text-align: center;
       color: #007BFF;
     }
-      
+
     h1 {
       padding: 10px;
       max-width: 100%;
@@ -127,7 +127,7 @@
       color: #721c24;
       margin-top: 5px;
     }
-      
+
     @media (max-width: 768px) {
       .container {
         padding: 10px;
@@ -162,6 +162,15 @@
         font-size: 0.9em;
       }
     }
+
+    .cheat-button {
+      background-color: #dc3545;
+      margin-left: 10px;
+    }
+
+    .cheat-button:hover {
+      background-color: #c82333;
+    }
   </style>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2107084410392210"
     crossorigin="anonymous"></script>
@@ -172,24 +181,28 @@
     <h1>Adjektivdeklination von Langopio</h1>
     <div class="instructions">
       <div class="game-inspiration">
-  <h2>Inspiration für das Spiel</h2>
-  <p>
-    Dieses Spiel wurde inspiriert von einem hilfreichen Video, das die Grundlagen der Adjektivdeklination im Deutschen
-    erklärt. Falls du noch nicht mit den Regeln der Adjektivdeklination vertraut bist, empfehlen wir dir, dieses Video
-    anzusehen, bevor du das Spiel spielst:
-  </p>
-  <p>
-    <a href="https://www.youtube.com/watch?v=UgRDUCnH2Ps" target="_blank" rel="noopener noreferrer">
-      Schau dir das Video hier an
-    </a>.
-  </p>
-  <p>
-    Das Video bietet eine klare Einführung in die Adjektivdeklination und macht es einfacher, die Tabellen in diesem
-    Spiel auszufüllen. Es ist die perfekte Vorbereitung, um dein Wissen zu testen und zu erweitern!
-  </p>
-</div>
+        <h2>Inspiration für das Spiel</h2>
+        <p>
+          Dieses Spiel wurde inspiriert von einem hilfreichen Video, das die Grundlagen der Adjektivdeklination im
+          Deutschen
+          erklärt. Falls du noch nicht mit den Regeln der Adjektivdeklination vertraut bist, empfehlen wir dir, dieses
+          Video
+          anzusehen, bevor du das Spiel spielst:
+        </p>
+        <p>
+          <a href="https://www.youtube.com/watch?v=UgRDUCnH2Ps" target="_blank" rel="noopener noreferrer">
+            Schau dir das Video hier an
+          </a>.
+        </p>
+        <p>
+          Das Video bietet eine klare Einführung in die Adjektivdeklination und macht es einfacher, die Tabellen in
+          diesem
+          Spiel auszufüllen. Es ist die perfekte Vorbereitung, um dein Wissen zu testen und zu erweitern!
+        </p>
+      </div>
       <p>Fülle die Deklinationstabellen für das gegebene Adjektiv und Substantiv aus.</p>
-      <p>Dieses Spiel ist am besten auf einem Desktop-Computer spielbar, obwohl es auch auf mobilen Geräten funktioniert.</p>
+      <p>Dieses Spiel ist am besten auf einem Desktop-Computer spielbar, obwohl es auch auf mobilen Geräten
+        funktioniert.</p>
       <div class="examples">
         <p><strong>Beispiel Adjektive und Substantive:</strong></p>
         <ul>
@@ -210,6 +223,7 @@
     <div style="display: flex; justify-content: center; flex-wrap: wrap;">
       <button type="button" id="start-btn">Start</button>
       <button type="button" id="submit-btn" style="display:none;">Submit</button>
+      <button type="button" id="fill-answers-btn" class="cheat-button" style="display:none;">Fill Answers</button>
       <button type="button" id="reset-btn" style="display:none;">Reset</button>
     </div>
     <form id="declension-form" style="display:none;">
@@ -356,6 +370,32 @@
     </form>
   </div>
   <script>
+    const correctAnswers = {
+      nominative: {
+        m: { bestimmter: 'der große Mann', unbestimmter: 'ein großer Mann', ohne: 'großer Mann' },
+        f: { bestimmter: 'die nette Frau', unbestimmter: 'eine nette Frau', ohne: 'nette Frau' },
+        n: { bestimmter: 'das rote Auto', unbestimmter: 'ein rotes Auto', ohne: 'rotes Auto' },
+        pl: { bestimmter: 'die hilfreichen Leute', unbestimmter: 'hilfreiche Leute', ohne: 'hilfreiche Leute' }
+      },
+      accusative: {
+        m: { bestimmter: 'den großen Mann', unbestimmter: 'einen großen Mann', ohne: 'großen Mann' },
+        f: { bestimmter: 'die nette Frau', unbestimmter: 'eine nette Frau', ohne: 'nette Frau' },
+        n: { bestimmter: 'das rote Auto', unbestimmter: 'ein rotes Auto', ohne: 'rotes Auto' },
+        pl: { bestimmter: 'die hilfreichen Leute', unbestimmter: 'hilfreiche Leute', ohne: 'hilfreiche Leute' }
+      },
+      dative: {
+        m: { bestimmter: 'dem großen Mann', unbestimmter: 'einem großen Mann', ohne: 'großem Mann' },
+        f: { bestimmter: 'der netten Frau', unbestimmter: 'einer netten Frau', ohne: 'netter Frau' },
+        n: { bestimmter: 'dem roten Auto', unbestimmter: 'einem roten Auto', ohne: 'rotem Auto' },
+        pl: { bestimmter: 'den hilfreichen Leuten', unbestimmter: 'hilfreichen Leuten', ohne: 'hilfreichen Leuten' }
+      },
+      genitive: {
+        m: { bestimmter: 'des großen Manns', unbestimmter: 'eines großen Manns', ohne: 'großen Manns' },
+        f: { bestimmter: 'der netten Frau', unbestimmter: 'einer netten Frau', ohne: 'netter Frau' },
+        n: { bestimmter: 'des roten Autos', unbestimmter: 'eines roten Autos', ohne: 'roten Autos' },
+        pl: { bestimmter: 'der hilfreichen Leute', unbestimmter: 'hilfreicher Leute', ohne: 'hilfreicher Leute' }
+      }
+    };
     let timerInterval;
     let startTime;
 
@@ -363,40 +403,25 @@
       document.getElementById('declension-form').style.display = 'block';
       document.getElementById('start-btn').style.display = 'none';
       document.getElementById('submit-btn').style.display = 'block';
+      document.getElementById('fill-answers-btn').style.display = 'block';
       document.getElementById('reset-btn').style.display = 'none';
-      document.getElementById('timer-container').style.display = 'block'; // Show timer
+      document.getElementById('timer-container').style.display = 'block';
       startTimer();
+    });
+
+    document.getElementById('fill-answers-btn').addEventListener('click', function () {
+      const inputs = document.querySelectorAll('input[type="text"]');
+      inputs.forEach(input => {
+        const inputCase = input.getAttribute('data-case');
+        const inputType = input.getAttribute('data-type');
+        const inputGender = input.getAttribute('data-gender');
+        input.value = correctAnswers[inputCase][inputGender][inputType];
+      });
     });
 
     document.getElementById('submit-btn').addEventListener('click', function () {
       clearInterval(timerInterval);
-      const correctAnswers = {
-        nominative: {
-          m: { bestimmter: 'der große Mann', unbestimmter: 'ein großer Mann', ohne: 'großer Mann' },
-          f: { bestimmter: 'die nette Frau', unbestimmter: 'eine nette Frau', ohne: 'nette Frau' },
-          n: { bestimmter: 'das rote Auto', unbestimmter: 'ein rotes Auto', ohne: 'rotes Auto' },
-          pl: { bestimmter: 'die hilfreichen Leute', unbestimmter: 'hilfreiche Leute', ohne: 'hilfreiche Leute' }
-        },
-        accusative: {
-          m: { bestimmter: 'den großen Mann', unbestimmter: 'einen großen Mann', ohne: 'großen Mann' },
-          f: { bestimmter: 'die nette Frau', unbestimmter: 'eine nette Frau', ohne: 'nette Frau' },
-          n: { bestimmter: 'das rote Auto', unbestimmter: 'ein rotes Auto', ohne: 'rotes Auto' },
-          pl: { bestimmter: 'die hilfreichen Leute', unbestimmter: 'hilfreiche Leute', ohne: 'hilfreiche Leute' }
-        },
-        dative: {
-          m: { bestimmter: 'dem großen Mann', unbestimmter: 'einem großen Mann', ohne: 'großem Mann' },
-          f: { bestimmter: 'der netten Frau', unbestimmter: 'einer netten Frau', ohne: 'netter Frau' },
-          n: { bestimmter: 'dem roten Auto', unbestimmter: 'einem roten Auto', ohne: 'rotem Auto' },
-          pl: { bestimmter: 'den hilfreichen Leuten', unbestimmter: 'hilfreichen Leuten', ohne: 'hilfreichen Leuten' }
-        },
-        genitive: {
-          m: { bestimmter: 'des großen Manns', unbestimmter: 'eines großen Manns', ohne: 'großen Manns' },
-          f: { bestimmter: 'der netten Frau', unbestimmter: 'einer netten Frau', ohne: 'netter Frau' },
-          n: { bestimmter: 'des roten Autos', unbestimmter: 'eines roten Autos', ohne: 'roten Autos' },
-          pl: { bestimmter: 'der hilfreichen Leute', unbestimmter: 'hilfreicher Leute', ohne: 'hilfreicher Leute' }
-        }
-      };
-
+      document.getElementById('fill-answers-btn').style.display = 'none';
       const inputs = document.querySelectorAll('input[type="text"]');
       let score = 0;
       const total = inputs.length;
@@ -442,6 +467,7 @@
       });
       document.getElementById('results').textContent = '';
       document.getElementById('reset-btn').style.display = 'none';
+      document.getElementById('fill-answers-btn').style.display = 'none';
       document.getElementById('declension-form').style.display = 'none';
       document.getElementById('start-btn').style.display = 'block';
       document.getElementById('timer').textContent = '0:00';
